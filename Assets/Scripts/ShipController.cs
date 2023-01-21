@@ -3,6 +3,9 @@ using UnityEngine;
 public class ShipController : MonoBehaviour
 {
     public static ShipController Instance { get; private set; }
+
+    public bool Moving => _input != Vector2.zero;
+    public float Magnitude => _force.magnitude;
  
     [SerializeField] private float _speedMultiplier;
     [SerializeField] private float _maxSpeed;
@@ -11,6 +14,7 @@ public class ShipController : MonoBehaviour
 
     private Rigidbody2D _rigidbody;
     private Vector2 _input;
+    private Vector2 _force;
     private bool _canMove;
 
     private void Awake()
@@ -25,12 +29,12 @@ public class ShipController : MonoBehaviour
 
     public void ThrustForward()
     {
-        Vector2 force = transform.up * _input.y * _speedMultiplier;
+        _force = transform.up * _input.y * _speedMultiplier;
         if (Input.GetKey(KeyCode.LeftShift))
             _rigidbody.drag = _speedMultiplier / _boostSpeed;
         else
             _rigidbody.drag = _speedMultiplier / _maxSpeed;
-        _rigidbody.AddForce(force, ForceMode2D.Force);
+        _rigidbody.AddForce(_force, ForceMode2D.Force);
     }
 
     private void RotateShip()

@@ -37,17 +37,32 @@ public class UIController : MonoBehaviour
                 _timeRemaining = 0;
             UpdateTimer();
         }
-        else
+        
+        if (_shipController.Moving && _fuel > 0)
+        {
+            _fuel -= Time.deltaTime * _shipController.Magnitude * _fuelConssumptionRate;
+            UpdateFuelUI();
+        }
+
+        if (_fuel <= 0 || _timeRemaining <= 0)
         {
             EndGame();
         }
+    }
+
+    private void UpdateFuelUI()
+    {
+        _fuelSlider.maxValue = _maxFuel;
+        _fuelSlider.value = _fuel;
+        int leftFuel = Mathf.RoundToInt(_fuel);
+        _fuelText.text = $"Fuel remaining {leftFuel} / {_maxFuel}";
     }
 
     private void UpdateTimer()
     {
         _timerText.text =
             $"Time remaining " +
-            $"{_timeRemaining / 60:00}:{_timeRemaining % 60:00}";
+            $"{(int)_timeRemaining / 60:00}:{(int)_timeRemaining % 60:00}";
     }
 
     private void EndGame()
