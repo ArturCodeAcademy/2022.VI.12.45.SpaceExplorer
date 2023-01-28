@@ -34,5 +34,7 @@ public class SatelliteGeneration : MonoBehaviour
             GameObject satellite = Instantiate(satellitePrefab, spawnPosition, Quaternion.identity);
             activeSatellites.Add(satellite.transform);
         }
+
+        QuestController.Instance.SetSatellites(activeSatellites);
     }
 }

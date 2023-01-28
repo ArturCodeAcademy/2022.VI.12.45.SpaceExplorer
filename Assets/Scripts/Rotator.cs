@@ -5,11 +5,14 @@ using UnityEngine;
 
 public class Rotator : MonoBehaviour
 {
+    [SerializeField] private float _minSpeed;
+    [SerializeField] private float _maxSpeed;
+
     private float _speed;
 
     void Start()
     {
-        _speed = Random.value * 100 - 50;
+        _speed = Random.Range(_minSpeed, _maxSpeed) * (Random.value > .5f? -1 : 1) / transform.position.magnitude;
     }
 
     void Update()

@@ -4,9 +4,19 @@ public class ShipController : MonoBehaviour
 {
     public static ShipController Instance { get; private set; }
 
+
+    public bool CanMove
+    {
+        get => _canMove;
+        set
+        {
+            _canMove = value;
+            _rigidbody.velocity = Vector2.zero;
+        }
+    }
     public bool Moving => _input != Vector2.zero;
     public float Magnitude => _force.magnitude;
- 
+
     [SerializeField] private float _speedMultiplier;
     [SerializeField] private float _maxSpeed;
     [SerializeField] private float _boostSpeed;
