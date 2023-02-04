@@ -6,6 +6,8 @@ public class QuestController : MonoBehaviour
 {
     public static QuestController Instance { get; private set; }
 
+    [SerializeField] List<MiniGame> _miniGames;
+
     public bool PointerVisible
     { 
         get => _questPointer.activeSelf;
@@ -52,6 +54,7 @@ public class QuestController : MonoBehaviour
         if (_satellites.Count > 0 && _canGetNewQuest)
         {
             _canGetNewQuest = false;
+            _isDocked = false;
             GenerateNewQuest();
         }
 
@@ -112,7 +115,28 @@ public class QuestController : MonoBehaviour
             _player.SetParent(_questSatelliteTransform);
             PointerVisible = false;
             _isDocked = true;
+
+            MiniGame game = GetRandomMiniGame();
+            game.gameObject.SetActive(true);
+            game.OnPassed.AddListener
+            (
+                delegate ()
+                {
+                    ShipController.Instance.CanMove = true;
+                    _player.SetParent(null);
+                    UpdateFixedSatellites();
+                    _canGetNewQuest = true;
+                    game.gameObject.SetActive(false);
+                }
+            );
         }
+    }
+
+    private MiniGame GetRandomMiniGame()
+    {
+        MiniGame game = _miniGames[Random.Range(0, _miniGames.Count)];
+        game.ResetMiniGame();
+        return game;
     }
 
     public void UpdateFixedSatellites()
