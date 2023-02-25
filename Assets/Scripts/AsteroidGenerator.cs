@@ -28,8 +28,19 @@ public class AsteroidGenerator : MonoBehaviour
 				float size = Random.Range(0.5f, 2f);
 				asteroid.localScale = Vector2.one * size;
 				asteroid.position = positions[i];
+
+				asteroid.GetComponent<Asteroid>().SetPlanet(_planetOrbit);
 			}
 			_beltDistanceFromPlanet *= 2;
+		}
+
+		for (int i = 0, count = Random.Range(1, 20); i < count; i++)
+		{
+			GameObject prefab = _asteroidPrefabs[Random.Range(0, _asteroidPrefabs.Length)];
+			Transform asteroid = Instantiate(prefab, _asteroidPoolParent).transform;
+			float size = Random.Range(0.5f, 2f);
+			asteroid.localScale = Vector2.one * size;
+			asteroid.position = Random.insideUnitCircle * Random.Range(20, 100);
 		}
 	}
 
